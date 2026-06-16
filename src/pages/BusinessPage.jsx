@@ -568,7 +568,7 @@ export default function BusinessPage() {
           </Link>
           <div className="nav-actions">
             <Link to="/" className="nav-secondary">Home</Link>
-            <Link to="/app" className="nav-cta">Get the App</Link>
+            <Link to="/website" className="nav-cta">Get the App</Link>
           </div>
         </div>
       </header>

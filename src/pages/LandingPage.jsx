@@ -344,7 +344,7 @@ export default function LandingPage() {
           </a>
           <div className="nav-actions">
             <Link to="/business" className="nav-secondary">Business</Link>
-            <Link to="/app" className="nav-cta">Get the App</Link>
+            <Link to="/website" className="nav-cta">Get the App</Link>
           </div>
         </div>
       </header>
