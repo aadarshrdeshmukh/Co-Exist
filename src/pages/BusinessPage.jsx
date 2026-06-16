@@ -5,81 +5,82 @@ import '../styles/business.css';
 
 /* ── Indian Rupee Formatter ── */
 function fmtINR(n) {
+  const neg = n < 0 ? '- ' : '';
   const s = Math.round(Math.abs(n)).toString();
-  if (s.length <= 3) return '₹ ' + s;
+  if (s.length <= 3) return neg + '₹ ' + s;
   const last3 = s.slice(-3);
   let rest = s.slice(0, -3);
   rest = rest.replace(/(\d)(?=(\d{2})+$)/g, '$1,');
-  return '₹ ' + rest + ',' + last3;
+  return neg + '₹ ' + rest + ',' + last3;
 }
 
 function fmtCompact(n) {
-  if (n >= 10000000) return '₹' + (n / 10000000).toFixed(1).replace(/\.0$/, '') + ' Cr';
-  if (n >= 100000) return '₹' + (n / 100000).toFixed(1).replace(/\.0$/, '') + ' L';
-  if (n >= 1000) return '₹' + (n / 1000).toFixed(0) + 'K';
-  return '₹' + n;
+  const neg = n < 0 ? '-' : '';
+  const a = Math.abs(n);
+  if (a >= 10000000) return neg + '₹' + (a / 10000000).toFixed(1).replace(/\.0$/, '') + ' Cr';
+  if (a >= 100000) return neg + '₹' + (a / 100000).toFixed(1).replace(/\.0$/, '') + ' L';
+  if (a >= 1000) return neg + '₹' + (a / 1000).toFixed(0) + 'K';
+  return neg + '₹' + a;
 }
 
 /* ── Financial Data ── */
 const CAPEX = [
-  { item: 'Mobile App Development', desc: 'Cross-platform React Native build', cost: 1800000 },
-  { item: 'Backend Infrastructure', desc: 'Cloud, APIs, databases, WebSockets', cost: 1200000 },
-  { item: 'UI/UX Design', desc: 'Design system, prototyping, user testing', cost: 600000 },
-  { item: 'Safety & Verification', desc: 'ID verification, SOS system integration', cost: 800000 },
-  { item: 'Location Services', desc: 'Maps API, geofencing, real-time tracking', cost: 500000 },
-  { item: 'Legal & Compliance', desc: 'DPDPA compliance, trademark, terms', cost: 400000 },
-  { item: 'Initial Marketing', desc: 'Campus launch, brand materials, events', cost: 1000000 },
-  { item: 'Office & Equipment', desc: 'Co-working setup, devices, tools', cost: 300000 },
+  { item: 'Mobile App Development', desc: 'Flutter MVP — cross-platform build', cost: 800000 },
+  { item: 'Backend Infrastructure', desc: 'Firebase, APIs, real-time database', cost: 400000 },
+  { item: 'UI/UX Design', desc: 'Founder-led with freelancer support', cost: 250000 },
+  { item: 'Safety & Verification', desc: 'Basic ID check, SOS integration', cost: 300000 },
+  { item: 'Location Services', desc: 'Maps API, basic geofencing', cost: 200000 },
+  { item: 'Legal & Compliance', desc: 'DPDPA basics, trademark filing', cost: 200000 },
+  { item: 'Initial Marketing', desc: 'Campus launches, posters, events', cost: 500000 },
+  { item: 'Equipment & Setup', desc: 'Laptops, co-working desk, devices', cost: 200000 },
 ];
 const CAPEX_TOTAL = CAPEX.reduce((s, r) => s + r.cost, 0);
 
 const OPEX = [
-  { item: 'Founder Salaries', monthly: 200000, annual: 2400000, color: '#4D9E72' },
-  { item: 'Engineering Team', monthly: 480000, annual: 5760000, color: '#3d7fad' },
-  { item: 'Operations', monthly: 120000, annual: 1440000, color: '#7655c4' },
-  { item: 'Marketing Team', monthly: 150000, annual: 1800000, color: '#A8D5BA' },
-  { item: 'Meta / Instagram Ads', monthly: 250000, annual: 3000000, color: '#BFD7EA' },
-  { item: 'Google Ads', monthly: 100000, annual: 1200000, color: '#D8C7FF' },
-  { item: 'Campus Ambassadors', monthly: 125000, annual: 1500000, color: '#F4D6B8' },
-  { item: 'Content Creation', monthly: 75000, annual: 900000, color: '#AED9E0' },
-  { item: 'Cloud Infrastructure', monthly: 120000, annual: 1440000, color: '#FFD6C0' },
-  { item: 'Customer Support', monthly: 60000, annual: 720000, color: '#8BC6A5' },
-  { item: 'Accounting & Legal', monthly: 50000, annual: 600000, color: '#C4B0E8' },
-  { item: 'Software & Tools', monthly: 40000, annual: 480000, color: '#D4A98A' },
+  { item: 'Founder Stipends (×2)', monthly: 60000, annual: 720000, color: '#4D9E72' },
+  { item: 'Freelance Developer', monthly: 80000, annual: 960000, color: '#3d7fad' },
+  { item: 'Meta / Instagram Ads', monthly: 80000, annual: 960000, color: '#7655c4' },
+  { item: 'Campus Ambassadors', monthly: 50000, annual: 600000, color: '#A8D5BA' },
+  { item: 'Content & Social Media', monthly: 30000, annual: 360000, color: '#BFD7EA' },
+  { item: 'Cloud & Hosting', monthly: 25000, annual: 300000, color: '#D8C7FF' },
+  { item: 'Software & Tools', monthly: 20000, annual: 240000, color: '#F4D6B8' },
+  { item: 'Legal & Accounting', monthly: 15000, annual: 180000, color: '#AED9E0' },
+  { item: 'Customer Support (P/T)', monthly: 15000, annual: 180000, color: '#FFD6C0' },
+  { item: 'Miscellaneous', monthly: 10000, annual: 120000, color: '#8BC6A5' },
 ];
 const OPEX_MONTHLY = OPEX.reduce((s, r) => s + r.monthly, 0);
 const OPEX_ANNUAL = OPEX.reduce((s, r) => s + r.annual, 0);
 
 const REVENUE = [
-  { source: 'Premium Subscriptions', desc: 'Coexist Pro (₹249/mo)', users: 8000, avg: 249, monthly: 1992000, share: 38.2, color: '#A8D5BA' },
-  { source: 'Venue Partnerships', desc: 'Verified venue listing fee', users: 120, avg: 8500, monthly: 1020000, share: 19.6, color: '#BFD7EA' },
-  { source: 'Presence Data Insights', desc: 'Anonymised analytics for venues', users: 25, avg: 35000, monthly: 875000, share: 16.8, color: '#D8C7FF' },
-  { source: 'Institutional Licensing', desc: 'College & corporate wellness plans', users: 15, avg: 45000, monthly: 675000, share: 12.9, color: '#F4D6B8' },
-  { source: 'Brand Collaborations', desc: 'Sponsored activity categories', users: 8, avg: 62500, monthly: 500000, share: 9.6, color: '#AED9E0' },
-  { source: 'In-App Boosts', desc: 'Extended radar, priority matching', users: 2000, avg: 75, monthly: 150000, share: 2.9, color: '#FFD6C0' },
+  { source: 'Premium Subscriptions', desc: 'Coexist Pro (₹99/mo)', users: 450, avg: 99, monthly: 44550, share: 29.4, color: '#A8D5BA' },
+  { source: 'Campus Tie-ups', desc: 'College wellness program fees', users: 3, avg: 15000, monthly: 45000, share: 29.7, color: '#BFD7EA' },
+  { source: 'Venue Partnerships', desc: 'Verified venue listing fee', users: 12, avg: 3500, monthly: 42000, share: 27.7, color: '#D8C7FF' },
+  { source: 'In-App Boosts', desc: 'Extended radar, priority matching', users: 300, avg: 49, monthly: 14700, share: 9.7, color: '#F4D6B8' },
+  { source: 'Brand Collaborations', desc: 'Sponsored activity categories', users: 1, avg: 5000, monthly: 5000, share: 3.3, color: '#AED9E0' },
 ];
 const REV_MONTHLY = REVENUE.reduce((s, r) => s + r.monthly, 0);
 
-const COGS = Math.round(REV_MONTHLY * 0.30);
+const COGS = Math.round(REV_MONTHLY * 0.35);
 const GROSS_PROFIT = REV_MONTHLY - COGS;
+const GROSS_MARGIN = ((GROSS_PROFIT / REV_MONTHLY) * 100).toFixed(1);
 const EBITDA = GROSS_PROFIT - OPEX_MONTHLY;
 const DEPRECIATION = Math.round(CAPEX_TOTAL / 36);
 const PRE_TAX = EBITDA - DEPRECIATION;
-const TAX = Math.round(PRE_TAX * 0.25);
+const TAX = PRE_TAX > 0 ? Math.round(PRE_TAX * 0.25) : 0;
 const NET_INCOME = PRE_TAX - TAX;
 
 const INCOME = [
-  { item: 'Revenue', monthly: REV_MONTHLY, annual: REV_MONTHLY * 12, note: 'From Revenue Streams sheet', highlight: false },
-  { item: 'COGS', monthly: COGS, annual: COGS * 12, note: 'Assume 30% for server, APIs, payments', highlight: false },
+  { item: 'Revenue', monthly: REV_MONTHLY, annual: REV_MONTHLY * 12, note: 'From Revenue Streams', highlight: false },
+  { item: 'COGS', monthly: COGS, annual: COGS * 12, note: '35% — server, APIs, payments', highlight: false },
   { item: 'Gross Profit', monthly: GROSS_PROFIT, annual: GROSS_PROFIT * 12, note: 'Revenue minus COGS', highlight: false },
-  { item: 'Gross Margin %', monthly: '70.0%', annual: '70.0%', note: 'Gross profit / Revenue', highlight: false, isPercent: true },
+  { item: 'Gross Margin %', monthly: GROSS_MARGIN + '%', annual: GROSS_MARGIN + '%', note: 'Gross profit / Revenue', highlight: false, isPercent: true },
   { item: 'OPEX', monthly: OPEX_MONTHLY, annual: OPEX_ANNUAL, note: 'From OPEX sheet', highlight: false },
-  { item: 'EBITDA', monthly: EBITDA, annual: EBITDA * 12, note: 'Gross profit minus OPEX', highlight: false },
+  { item: 'EBITDA', monthly: EBITDA, annual: EBITDA * 12, note: 'Gross profit minus OPEX', highlight: true },
   { item: 'Depreciation', monthly: DEPRECIATION, annual: DEPRECIATION * 12, note: 'CAPEX over 3 years', highlight: false },
-  { item: 'Tax', monthly: TAX, annual: TAX * 12, note: '25% on profit', highlight: false },
-  { item: 'Final Net Income', monthly: NET_INCOME, annual: NET_INCOME * 12, note: 'After depreciation and tax', highlight: true },
+  { item: 'Tax', monthly: TAX, annual: TAX * 12, note: 'No profit = no tax', highlight: false },
+  { item: 'Net Income', monthly: NET_INCOME, annual: NET_INCOME * 12, note: 'Still in the red — burn phase', highlight: true },
   { item: 'Opening CAPEX', monthly: CAPEX_TOTAL, annual: CAPEX_TOTAL, note: 'One-time startup investment', highlight: false, isSingle: true },
-  { item: 'Cash Needed Before Profit', monthly: CAPEX_TOTAL, annual: CAPEX_TOTAL, note: 'CAPEX plus working capital', highlight: true, isSingle: true },
+  { item: 'Total Funding Needed', monthly: CAPEX_TOTAL + Math.abs(NET_INCOME * 12), annual: CAPEX_TOTAL + Math.abs(NET_INCOME * 12), note: 'CAPEX + Year 1 burn runway', highlight: true, isSingle: true },
 ];
 
 export default function BusinessPage() {
@@ -337,11 +338,11 @@ export default function BusinessPage() {
 
       // Data: Year 0 (launch), Year 1 (ramp), Year 2 (steady), Year 3 (scale)
       const years = [0, 1, 2, 3];
-      const revenue = [0, 18000000, 62544000, 94000000];
-      const cumPL =   [-6600000, -15240000, 100000, 25000000];
+      const revenue = [0, 720000, 1815000, 5400000];
+      const cumPL =   [-2850000, -6350000, -8170000, -5000000];
 
-      const yMin = -20000000;
-      const yMax = 100000000;
+      const yMin = -10000000;
+      const yMax = 6000000;
       const yRange = yMax - yMin;
 
       function toX(yr) { return pad.left + (yr / 3) * chartW; }
@@ -501,7 +502,7 @@ export default function BusinessPage() {
     const incomeBarData = [
       { label: 'Revenue', value: REV_MONTHLY, color: '#4D9E72' },
       { label: 'Gross Profit', value: GROSS_PROFIT, color: '#3d7fad' },
-      { label: 'EBITDA', value: EBITDA, color: '#7655c4' },
+      { label: 'OPEX', value: OPEX_MONTHLY, color: '#e05555' },
     ];
 
     const io = new IntersectionObserver(entries => {
@@ -509,10 +510,10 @@ export default function BusinessPage() {
         if (!e.isIntersecting) return;
         e.target.classList.add('in');
         if (e.target.id === 'opex-chart-wrap') {
-          drawDonut('opex-pie', opexPieData, { centerText: '₹17.7L', centerSub: 'Monthly OPEX' });
+          drawDonut('opex-pie', opexPieData, { centerText: fmtCompact(OPEX_MONTHLY), centerSub: 'Monthly OPEX' });
         }
         if (e.target.id === 'rev-chart-wrap') {
-          drawDonut('rev-pie', revPieData, { dark: true, centerText: '₹52.1L', centerSub: 'Monthly Revenue' });
+          drawDonut('rev-pie', revPieData, { dark: true, centerText: fmtCompact(REV_MONTHLY), centerSub: 'Monthly Revenue' });
         }
         if (e.target.id === 'income-chart-wrap') {
           drawBars('income-bar', incomeBarData);
@@ -580,14 +581,14 @@ export default function BusinessPage() {
         <div className="container biz-hero-body">
           <span className="eyebrow light">Business Plan · India 2026</span>
           <h1>Coexist<br /><span className="hero-em">Business Plan</span></h1>
-          <p className="biz-hero-sub">Financial projections for India's first Human Presence Platform.<br />Year 2 steady-state estimates across 5 cities.</p>
+          <p className="biz-hero-sub">Financial projections for India's first Human Presence Platform.<br />Seed-stage estimates — Year 1 burn phase, 2–3 campus cities.</p>
           <div className="biz-hero-metrics">
             <div className="bhm">
               <span className="bhm-val">{fmtCompact(REV_MONTHLY)}</span>
               <span className="bhm-label">Monthly Revenue</span>
             </div>
             <div className="bhm">
-              <span className="bhm-val">70%</span>
+              <span className="bhm-val">{GROSS_MARGIN}%</span>
               <span className="bhm-label">Gross Margin</span>
             </div>
             <div className="bhm">
@@ -608,7 +609,7 @@ export default function BusinessPage() {
           <div className="sec-head">
             <span className="eyebrow">Capital Expenditure</span>
             <h2>One-time <span className="em">Startup Costs</span></h2>
-            <p className="sec-sub">Initial investment required to build and launch the Coexist platform across India</p>
+            <p className="sec-sub">Lean MVP investment to build and launch Coexist on 2 campuses</p>
           </div>
           <div className="biz-table-card">
             <table className="biz-table">
@@ -788,25 +789,25 @@ export default function BusinessPage() {
             </div>
             <div className="biz-income-right">
               <div className="biz-metrics-row">
-                <div className="biz-metric sage">
+                <div className="biz-metric">
                   <span className="bm-label">Monthly Revenue</span>
                   <span className="bm-val">{fmtINR(REV_MONTHLY)}</span>
-                  <span className="bm-sub">Top-line run rate</span>
+                  <span className="bm-sub">Early traction</span>
                 </div>
-                <div className="biz-metric sky">
+                <div className="biz-metric">
                   <span className="bm-label">Gross Margin</span>
-                  <span className="bm-val">70.0%</span>
+                  <span className="bm-val">{GROSS_MARGIN}%</span>
                   <span className="bm-sub">Before OPEX</span>
                 </div>
-                <div className="biz-metric lav">
+                <div className="biz-metric">
                   <span className="bm-label">Monthly EBITDA</span>
                   <span className="bm-val">{fmtINR(EBITDA)}</span>
-                  <span className="bm-sub">Operating profitability</span>
+                  <span className="bm-sub">Burn phase</span>
                 </div>
-                <div className="biz-metric sand">
-                  <span className="bm-label">Annual Net Income</span>
+                <div className="biz-metric">
+                  <span className="bm-label">Annual Net Loss</span>
                   <span className="bm-val">{fmtINR(NET_INCOME * 12)}</span>
-                  <span className="bm-sub">Final income</span>
+                  <span className="bm-sub">Pre-breakeven</span>
                 </div>
               </div>
               <div className="biz-chart-card" id="income-chart-wrap">
@@ -844,27 +845,27 @@ export default function BusinessPage() {
             <div className="growth-milestones">
               <div className="growth-milestone">
                 <div className="gm-year">Year 0</div>
-                <div className="gm-title">Launch &amp; Build</div>
-                <div className="gm-val negative">-₹66 L</div>
-                <div className="gm-desc">CAPEX investment. App development, safety systems, legal setup.</div>
+                <div className="gm-title">Build &amp; Launch</div>
+                <div className="gm-val negative">-₹28.5 L</div>
+                <div className="gm-desc">MVP development, safety systems, legal setup. Launch on 2 campuses.</div>
               </div>
               <div className="growth-milestone">
                 <div className="gm-year">Year 1</div>
-                <div className="gm-title">Campus Growth</div>
-                <div className="gm-val negative">-₹1.52 Cr</div>
-                <div className="gm-desc">Revenue ramping to ₹15L/month. Still in burn phase — investing in 5 city expansion.</div>
+                <div className="gm-title">Campus Traction</div>
+                <div className="gm-val negative">-₹35 L</div>
+                <div className="gm-desc">5K MAU, ₹60K/mo revenue. Burn phase — validating product-market fit.</div>
               </div>
               <div className="growth-milestone">
                 <div className="gm-year">Year 2</div>
-                <div className="gm-title">Breakeven 🎯</div>
-                <div className="gm-val positive">₹6.25 Cr</div>
-                <div className="gm-desc">Steady-state ₹52L/month revenue. Premium subscriptions + venue partnerships driving profitability.</div>
+                <div className="gm-title">Revenue Growth</div>
+                <div className="gm-val negative">-₹18.2 L</div>
+                <div className="gm-desc">15K MAU across 3 cities. Revenue at ₹1.5L/mo. Still in the red but improving.</div>
               </div>
               <div className="growth-milestone">
                 <div className="gm-year">Year 3</div>
-                <div className="gm-title">Scale &amp; Profit</div>
-                <div className="gm-val positive">₹9.4 Cr</div>
-                <div className="gm-desc">15+ cities, 50K+ MAU. Institutional licensing and brand deals accelerate growth.</div>
+                <div className="gm-title">Path to Breakeven 🎯</div>
+                <div className="gm-val positive">₹4 L</div>
+                <div className="gm-desc">40K MAU, 5 cities. Revenue at ₹4.5L/mo. First signs of profitability.</div>
               </div>
             </div>
           </div>
