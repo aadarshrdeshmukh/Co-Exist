@@ -4,6 +4,14 @@ import '../styles/app.css';
 
 export default function AppPage() {
   useEffect(() => {
+    /* ── Clean up residual Lenis / GSAP state from previous page ── */
+    document.documentElement.classList.remove('lenis', 'lenis-smooth', 'lenis-stopped', 'lenis-scrolling');
+    document.documentElement.style.removeProperty('overflow');
+    document.documentElement.style.removeProperty('height');
+    document.body.style.removeProperty('overflow');
+    document.body.style.removeProperty('height');
+    window.scrollTo(0, 0);
+
     /* ── colour tokens ── */
     const C={sage:'#A8D5BA',sageDark:'#4D9E72',sky:'#BFD7EA',skyDark:'#3d7fad',lav:'#D8C7FF',lavDark:'#7655c4',sand:'#F4D6B8',teal:'#AED9E0',peach:'#FFD6C0',ivory:'#FAF7F2',charcoal:'#1C1C1C',ink:'#111111'};
     function ha(hex,a){const r=parseInt(hex.slice(1,3),16),g=parseInt(hex.slice(3,5),16),b=parseInt(hex.slice(5,7),16);return`rgba(${r},${g},${b},${a})`;}

@@ -84,6 +84,14 @@ const INCOME = [
 
 export default function BusinessPage() {
   useEffect(() => {
+    /* ── Clean up residual Lenis / GSAP state from previous page ── */
+    document.documentElement.classList.remove('lenis', 'lenis-smooth', 'lenis-stopped', 'lenis-scrolling');
+    document.documentElement.style.removeProperty('overflow');
+    document.documentElement.style.removeProperty('height');
+    document.body.style.removeProperty('overflow');
+    document.body.style.removeProperty('height');
+    window.scrollTo(0, 0);
+
     /* ── Colour helpers ── */
     const C = {
       sage:'#A8D5BA', sageDark:'#4D9E72',

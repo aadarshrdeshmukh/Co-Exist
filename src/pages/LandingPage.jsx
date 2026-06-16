@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useLayoutEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import Lenis from 'lenis';
 import gsap from 'gsap';
@@ -9,6 +9,42 @@ import '../styles/landing.css';
 gsap.registerPlugin(ScrollTrigger);
 
 export default function LandingPage() {
+  /* Refs to let useLayoutEffect cleanup access useEffect values */
+  const lenisRef = useRef(null);
+  const lenisRafRef = useRef(null);
+  const cleanupFnsRef = useRef([]);
+  const radarRafRef = useRef(null);
+  const timerIntervalRef = useRef(null);
+  const ioRef = useRef(null);
+  const scrollHandlerRef = useRef(null);
+  const anchorHandlerRef = useRef(null);
+
+  /* ── Synchronous cleanup BEFORE React removes DOM ── */
+  useLayoutEffect(() => {
+    return () => {
+      /* Kill ScrollTrigger FIRST — kill(true) reverts pinned elements */
+      ScrollTrigger.getAll().forEach(st => st.kill(true));
+      /* Destroy Lenis */
+      if (lenisRef.current) { lenisRef.current.destroy(); lenisRef.current = null; }
+      if (lenisRafRef.current) { gsap.ticker.remove(lenisRafRef.current); lenisRafRef.current = null; }
+      /* Other cleanups */
+      cleanupFnsRef.current.forEach(fn => fn && fn());
+      if (radarRafRef.current) cancelAnimationFrame(radarRafRef.current);
+      if (timerIntervalRef.current) clearInterval(timerIntervalRef.current);
+      if (ioRef.current) ioRef.current.disconnect();
+      if (scrollHandlerRef.current) window.removeEventListener('scroll', scrollHandlerRef.current);
+      if (anchorHandlerRef.current) document.removeEventListener('click', anchorHandlerRef.current);
+      /* Clean Lenis residue from DOM */
+      const html = document.documentElement;
+      html.classList.remove('lenis', 'lenis-smooth', 'lenis-stopped', 'lenis-scrolling');
+      html.style.removeProperty('overflow');
+      html.style.removeProperty('height');
+      document.body.style.removeProperty('overflow');
+      document.body.style.removeProperty('height');
+      window.scrollTo(0, 0);
+    };
+  }, []);
+
   useEffect(() => {
     /* ── Design tokens ── */
     const C = {
@@ -281,17 +317,15 @@ export default function LandingPage() {
         .to('.bat-phone-wrap', { opacity: 1, x: 0, duration: 0.4 }, '-=0.2');
     }
 
-    return () => {
-      cleanups.forEach(fn => fn && fn());
-      if (radarRaf) cancelAnimationFrame(radarRaf);
-      if (timerInterval) clearInterval(timerInterval);
-      io.disconnect();
-      window.removeEventListener('scroll', onScroll);
-      document.removeEventListener('click', anchorHandler);
-      lenis.destroy();
-      ScrollTrigger.getAll().forEach(st => st.kill());
-      gsap.ticker.remove(lenisRaf);
-    };
+    /* Store refs for useLayoutEffect cleanup */
+    lenisRef.current = lenis;
+    lenisRafRef.current = lenisRaf;
+    radarRafRef.current = radarRaf;
+    timerIntervalRef.current = timerInterval;
+    ioRef.current = io;
+    scrollHandlerRef.current = onScroll;
+    anchorHandlerRef.current = anchorHandler;
+    cleanupFnsRef.current = cleanups;
   }, []);
 
   return (
