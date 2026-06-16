@@ -598,10 +598,17 @@ html, body { margin: 0; padding: 0; width: 100%; }
 .biz-table .total-row {
   background: var(--charcoal) !important;
 }
-.biz-table .total-row td {
-  color: var(--ivory);
+.biz-table .total-row td,
+.biz-table .total-row td strong,
+.biz-table .total-row td.num,
+.biz-table .total-row td.num strong,
+.biz-table tfoot .total-row td,
+.biz-table tfoot .total-row td strong {
+  color: #FFFFFF !important;
   font-weight: 700;
   font-family: var(--f-head);
+}
+.biz-table .total-row td {
   padding: 14px 18px;
   border-bottom: none;
   font-size: 0.88rem;
