@@ -4,6 +4,7 @@ import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-route
 const LandingPage = lazy(() => import('./pages/LandingPage'));
 const AppPage = lazy(() => import('./pages/AppPage'));
 const BusinessPage = lazy(() => import('./pages/BusinessPage'));
+const WebsitePage = lazy(() => import('./pages/WebsitePage'));
 
 /* Reset scroll + clean up Lenis residue on every route change */
 function ScrollToTop() {
@@ -28,6 +29,7 @@ export default function App() {
           <Route path="/" element={<LandingPage />} />
           <Route path="/app" element={<AppPage />} />
           <Route path="/business" element={<BusinessPage />} />
+          <Route path="/website" element={<WebsitePage />} />
 
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
