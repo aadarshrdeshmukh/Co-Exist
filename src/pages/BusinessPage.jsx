@@ -52,35 +52,39 @@ const OPEX_MONTHLY = OPEX.reduce((s, r) => s + r.monthly, 0);
 const OPEX_ANNUAL = OPEX.reduce((s, r) => s + r.annual, 0);
 
 const REVENUE = [
-  { source: 'Premium Subscriptions', desc: 'Coexist Pro (₹99/mo)', users: 450, avg: 99, monthly: 44550, share: 29.4, color: '#A8D5BA' },
+  { source: 'Premium Subscriptions', desc: 'Coexist Pro (₹99/mo)', users: 450, avg: 99, monthly: 44550, share: 29.5, color: '#A8D5BA' },
   { source: 'Campus Tie-ups', desc: 'College wellness program fees', users: 3, avg: 15000, monthly: 45000, share: 29.7, color: '#BFD7EA' },
-  { source: 'Venue Partnerships', desc: 'Verified venue listing fee', users: 12, avg: 3500, monthly: 42000, share: 27.7, color: '#D8C7FF' },
+  { source: 'Venue Partnerships', desc: 'Verified venue listing fee', users: 12, avg: 3500, monthly: 42000, share: 27.8, color: '#D8C7FF' },
   { source: 'In-App Boosts', desc: 'Extended radar, priority matching', users: 300, avg: 49, monthly: 14700, share: 9.7, color: '#F4D6B8' },
   { source: 'Brand Collaborations', desc: 'Sponsored activity categories', users: 1, avg: 5000, monthly: 5000, share: 3.3, color: '#AED9E0' },
 ];
 const REV_MONTHLY = REVENUE.reduce((s, r) => s + r.monthly, 0);
 
-const COGS = Math.round(REV_MONTHLY * 0.35);
-const GROSS_PROFIT = REV_MONTHLY - COGS;
-const GROSS_MARGIN = ((GROSS_PROFIT / REV_MONTHLY) * 100).toFixed(1);
-const EBITDA = GROSS_PROFIT - OPEX_MONTHLY;
+/* ── Year 1 P&L (used in Income Statement — matches Growth Chart Year 1) ── */
+const Y1_REV_MONTHLY = 60000;
+const Y1_OPEX_MONTHLY = 251500;
+const Y1_OPEX_ANNUAL = Y1_OPEX_MONTHLY * 12;
+const Y1_COGS = Math.round(Y1_REV_MONTHLY * 0.35);
+const Y1_GROSS_PROFIT = Y1_REV_MONTHLY - Y1_COGS;
+const Y1_GROSS_MARGIN = ((Y1_GROSS_PROFIT / Y1_REV_MONTHLY) * 100).toFixed(1);
+const Y1_EBITDA = Y1_GROSS_PROFIT - Y1_OPEX_MONTHLY;
 const DEPRECIATION = Math.round(CAPEX_TOTAL / 36);
-const PRE_TAX = EBITDA - DEPRECIATION;
-const TAX = PRE_TAX > 0 ? Math.round(PRE_TAX * 0.25) : 0;
-const NET_INCOME = PRE_TAX - TAX;
+const Y1_PRE_TAX = Y1_EBITDA - DEPRECIATION;
+const Y1_TAX = Y1_PRE_TAX > 0 ? Math.round(Y1_PRE_TAX * 0.25) : 0;
+const Y1_NET_INCOME = Y1_PRE_TAX - Y1_TAX;
 
 const INCOME = [
-  { item: 'Revenue', monthly: REV_MONTHLY, annual: REV_MONTHLY * 12, note: 'From Revenue Streams', highlight: false },
-  { item: 'COGS', monthly: COGS, annual: COGS * 12, note: '35% — server, APIs, payments', highlight: false },
-  { item: 'Gross Profit', monthly: GROSS_PROFIT, annual: GROSS_PROFIT * 12, note: 'Revenue minus COGS', highlight: false },
-  { item: 'Gross Margin %', monthly: GROSS_MARGIN + '%', annual: GROSS_MARGIN + '%', note: 'Gross profit / Revenue', highlight: false, isPercent: true },
-  { item: 'OPEX', monthly: OPEX_MONTHLY, annual: OPEX_ANNUAL, note: 'From OPEX sheet', highlight: false },
-  { item: 'EBITDA', monthly: EBITDA, annual: EBITDA * 12, note: 'Gross profit minus OPEX', highlight: true },
+  { item: 'Revenue', monthly: Y1_REV_MONTHLY, annual: Y1_REV_MONTHLY * 12, note: '5K MAU · ₹60K/mo early traction', highlight: false },
+  { item: 'COGS', monthly: Y1_COGS, annual: Y1_COGS * 12, note: '35% — server, APIs, payments', highlight: false },
+  { item: 'Gross Profit', monthly: Y1_GROSS_PROFIT, annual: Y1_GROSS_PROFIT * 12, note: 'Revenue minus COGS', highlight: false },
+  { item: 'Gross Margin %', monthly: Y1_GROSS_MARGIN + '%', annual: Y1_GROSS_MARGIN + '%', note: 'Gross profit / Revenue', highlight: false, isPercent: true },
+  { item: 'OPEX', monthly: Y1_OPEX_MONTHLY, annual: Y1_OPEX_ANNUAL, note: 'Lean Year 1 team', highlight: false },
+  { item: 'EBITDA', monthly: Y1_EBITDA, annual: Y1_EBITDA * 12, note: 'Gross profit minus OPEX', highlight: true },
   { item: 'Depreciation', monthly: DEPRECIATION, annual: DEPRECIATION * 12, note: 'CAPEX over 3 years', highlight: false },
-  { item: 'Tax', monthly: TAX, annual: TAX * 12, note: 'No profit = no tax', highlight: false },
-  { item: 'Net Income', monthly: NET_INCOME, annual: NET_INCOME * 12, note: 'Still in the red — burn phase', highlight: true },
+  { item: 'Tax', monthly: Y1_TAX, annual: Y1_TAX * 12, note: 'No profit = no tax', highlight: false },
+  { item: 'Net Income', monthly: Y1_NET_INCOME, annual: Y1_NET_INCOME * 12, note: 'Burn phase — validating PMF', highlight: true },
   { item: 'Opening CAPEX', monthly: CAPEX_TOTAL, annual: CAPEX_TOTAL, note: 'One-time startup investment', highlight: false, isSingle: true },
-  { item: 'Total Funding Needed', monthly: CAPEX_TOTAL + Math.abs(NET_INCOME * 12), annual: CAPEX_TOTAL + Math.abs(NET_INCOME * 12), note: 'CAPEX + Year 1 burn runway', highlight: true, isSingle: true },
+  { item: 'Total Funding Needed', monthly: CAPEX_TOTAL + Math.abs(Y1_NET_INCOME * 12), annual: CAPEX_TOTAL + Math.abs(Y1_NET_INCOME * 12), note: 'CAPEX + Year 1 burn runway', highlight: true, isSingle: true },
 ];
 
 export default function BusinessPage() {
@@ -454,7 +458,7 @@ export default function BusinessPage() {
               const val = i < data.length ? data[i] : 0;
               let label;
               if (Math.abs(val) >= 10000000) label = `₹${(val / 10000000).toFixed(1)} Cr`;
-              else if (Math.abs(val) >= 100000) label = `${val < 0 ? '-' : ''}₹${(Math.abs(val) / 100000).toFixed(0)} L`;
+              else if (Math.abs(val) >= 100000) { const lv = Math.abs(val) / 100000; label = `${val < 0 ? '-' : ''}₹${lv % 1 === 0 ? lv.toFixed(0) : lv.toFixed(1)} L`; }
               else if (val === 0) label = '₹0';
               else label = `₹${(val / 100000).toFixed(1)} L`;
 
@@ -500,9 +504,9 @@ export default function BusinessPage() {
     const opexPieData = OPEX.map(r => ({ label: r.item, value: r.monthly, color: r.color }));
     const revPieData = REVENUE.map(r => ({ label: r.source, value: r.monthly, color: r.color }));
     const incomeBarData = [
-      { label: 'Revenue', value: REV_MONTHLY, color: '#4D9E72' },
-      { label: 'Gross Profit', value: GROSS_PROFIT, color: '#3d7fad' },
-      { label: 'OPEX', value: OPEX_MONTHLY, color: '#e05555' },
+      { label: 'Revenue', value: Y1_REV_MONTHLY, color: '#4D9E72' },
+      { label: 'Gross Profit', value: Y1_GROSS_PROFIT, color: '#3d7fad' },
+      { label: 'OPEX', value: Y1_OPEX_MONTHLY, color: '#e05555' },
     ];
 
     const io = new IntersectionObserver(entries => {
@@ -584,15 +588,15 @@ export default function BusinessPage() {
           <p className="biz-hero-sub">Financial projections for India's first Human Presence Platform.<br />Seed-stage estimates — Year 1 burn phase, 2–3 campus cities.</p>
           <div className="biz-hero-metrics">
             <div className="bhm">
-              <span className="bhm-val">{fmtCompact(REV_MONTHLY)}</span>
+              <span className="bhm-val">{fmtCompact(Y1_REV_MONTHLY)}</span>
               <span className="bhm-label">Monthly Revenue</span>
             </div>
             <div className="bhm">
-              <span className="bhm-val">{GROSS_MARGIN}%</span>
+              <span className="bhm-val">{Y1_GROSS_MARGIN}%</span>
               <span className="bhm-label">Gross Margin</span>
             </div>
             <div className="bhm">
-              <span className="bhm-val">{fmtCompact(EBITDA)}</span>
+              <span className="bhm-val">{fmtCompact(Y1_EBITDA)}</span>
               <span className="bhm-label">Monthly EBITDA</span>
             </div>
             <div className="bhm">
@@ -760,9 +764,9 @@ export default function BusinessPage() {
       <section className="biz-section" id="income">
         <div className="container">
           <div className="sec-head">
-            <span className="eyebrow">Income Statement</span>
+            <span className="eyebrow">Year 1 · Income Statement</span>
             <h2>Revenue to <span className="em">Net Income</span></h2>
-            <p className="sec-sub">Complete P&L projection — revenue minus expenses, EBITDA, and final income</p>
+            <p className="sec-sub">Year 1 P&L projection — 5K MAU, 2 campuses, validating product-market fit</p>
           </div>
           <div className="biz-income-grid">
             <div className="biz-table-card">
@@ -791,22 +795,22 @@ export default function BusinessPage() {
               <div className="biz-metrics-row">
                 <div className="biz-metric">
                   <span className="bm-label">Monthly Revenue</span>
-                  <span className="bm-val">{fmtINR(REV_MONTHLY)}</span>
-                  <span className="bm-sub">Early traction</span>
+                  <span className="bm-val">{fmtINR(Y1_REV_MONTHLY)}</span>
+                  <span className="bm-sub">Year 1 · 5K MAU</span>
                 </div>
                 <div className="biz-metric">
                   <span className="bm-label">Gross Margin</span>
-                  <span className="bm-val">{GROSS_MARGIN}%</span>
+                  <span className="bm-val">{Y1_GROSS_MARGIN}%</span>
                   <span className="bm-sub">Before OPEX</span>
                 </div>
                 <div className="biz-metric">
                   <span className="bm-label">Monthly EBITDA</span>
-                  <span className="bm-val">{fmtINR(EBITDA)}</span>
+                  <span className="bm-val">{fmtINR(Y1_EBITDA)}</span>
                   <span className="bm-sub">Burn phase</span>
                 </div>
                 <div className="biz-metric">
                   <span className="bm-label">Annual Net Loss</span>
-                  <span className="bm-val">{fmtINR(NET_INCOME * 12)}</span>
+                  <span className="bm-val">{fmtINR(Y1_NET_INCOME * 12)}</span>
                   <span className="bm-sub">Pre-breakeven</span>
                 </div>
               </div>
@@ -864,8 +868,8 @@ export default function BusinessPage() {
               <div className="growth-milestone">
                 <div className="gm-year">Year 3</div>
                 <div className="gm-title">Path to Breakeven 🎯</div>
-                <div className="gm-val positive">₹4 L</div>
-                <div className="gm-desc">40K MAU, 5 cities. Revenue at ₹4.5L/mo. First signs of profitability.</div>
+                <div className="gm-val positive">₹31.7 L</div>
+                <div className="gm-desc">40K MAU, 5 cities. Revenue at ₹4.5L/mo. Economies of scale kick in — lower per-user costs, reduced marketing burn.</div>
               </div>
             </div>
           </div>
